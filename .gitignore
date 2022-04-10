@@ -124,3 +124,9 @@ venv.bak/
 .dmypy.json
 dmypy.json
 @abdelaziz321
+
+# GDRIVE Client Secret
+client_secrets.json
+
+# Backup archives
+*.zip

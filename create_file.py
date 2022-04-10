@@ -14,8 +14,10 @@ def create_compressed_backup(path, file_name):
         bool: True if folder to be compressed exists. False if failed compression
     '''
     try:
+        print("Creating compressed backup file...")
         shutil.make_archive(f"archive/{file_name}", 'zip', path)
-        print(f"Created compressed backup: {file_name}")
+        print(f"Created compressed backup: {file_name} at {path}")
         return True
-    except FileNotFoundError:
+    except FileNotFoundError as e:
+        print(e)
         return False
