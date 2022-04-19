@@ -5,6 +5,7 @@ from importlib.resources import path
 from create_file import create_compressed_backup
 from dotenv import load_dotenv
 from gdrive_authentication import google_drive_auth
+from gdrive_list_files import gdrive_listing
 from gdrive_upload import gdrive_upload
 
 def controller():
@@ -32,4 +33,6 @@ def controller():
     # Else, prints success message and exits
     else:
         print("Success: Backup file uploaded to Google Drive.")
+        # Lists all files in the user's Google Drive after uploading the backup file
+        gdrive_listing(drive_service)
         sys.exit(0)
