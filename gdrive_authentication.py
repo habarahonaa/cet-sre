@@ -1,19 +1,34 @@
-from pydrive.auth import GoogleAuth
-from pydrive.drive import GoogleDrive
+from os import environ as env
+from dotenv import load_dotenv
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
+
 
 def google_drive_auth():
-    ''' Authenticates desired Google account.
+    ''' Authenticates desired Google account and returns a service object.
 
-    Uses PyDrive's OAuth 2.0 wrapper to authenticate to Google Driveaccount where backups will be
-    stored. It uses a built-in method that sets up a local web server for authentication purposes.
-    This allows automatic reception of authentication codes from the user and local auth.
+    Using the service account credentials, the function authenticates to the desired Google account and returns a service object that can be used to call methods on the Google Drive API.
 
     Returns:
-            gauth: an instance of the GoogleAuth class that has an approved or rejected token.
-            drive: an instance of the GoogleDrive class and associated methods (receives an authorized GoogleAuth instance to do so)
+           service: Authenticated Google Drive service object.
     '''
-    gauth = GoogleAuth()
-    gauth.LocalWebserverAuth()
-    drive = GoogleDrive(gauth)
-    print('Succesfully Authenticated to Google Drive')
-    return gauth, drive
+    load_dotenv()
+    # Sets authentication scope
+    print("Authenticating to Google Drive...")
+    SCOPES = ['https://www.googleapis.com/auth/drive']
+    # Gets credentials path from environment variable 'GOOGLE_APPLICATION_CREDENTIALS' using dotenv
+    SERVICE_ACCOUNT_FILE = env['GOOGLE_APPLICATION_CREDENTIALS']
+    # Creates a credentials object from the service account file
+    credentials = service_account.Credentials.from_service_account_file(
+        SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+
+    try:
+        # Authenticates to Google Drive using the credentials object
+        service = build('drive', 'v3', credentials=credentials)
+        print("Authentication successful!")
+        return service
+
+    except Exception as e:
+        print("Authentication failed!")
+        print(e)
+        return None

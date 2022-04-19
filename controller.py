@@ -23,10 +23,10 @@ def controller():
     if not create_compressed_backup(path, file_name):
         print("Error: Unable to create backup file.")
         sys.exit(0)
-    # Else, starts Google authentication process calling the gdrive_auth() function
-    auth, drive = google_drive_auth()
+    # Else, starts Google authentication process calling the google_drive_auth() function
+    drive_service = google_drive_auth()
     # Attempts to upload the compressed file to Google Drive. If not successful, prints error message and exits
-    if not gdrive_upload(drive, file_name):
+    if not gdrive_upload(drive_service, file_name):
         print("Error: Unable to upload backup file.")
         sys.exit(0)
     # Else, prints success message and exits
